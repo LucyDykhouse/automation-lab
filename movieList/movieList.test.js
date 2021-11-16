@@ -1,4 +1,5 @@
 const { Builder, Capabilities, By } = require("selenium-webdriver");
+const { isExportDeclaration } = require("typescript");
 require('chromedriver');
 const driver = new Builder().withCapabilities(Capabilities.chrome()).build();
 
@@ -15,4 +16,16 @@ test('Add movie to page', async () => {
     await inputForm.sendKeys('Coco');
     await driver.findElement(By.xpath('//form/button')).click();
     await driver.sleep(2000);
+});
+
+test('Message content for crossOffMovie', async () => {
+    await driver.findElement(By.xpath('//li/span')).click();
+    let message = await driver.findElement(By.id('message')).getText();
+    expect(message).toEqual('Coco watched!');
+});
+
+test('Delete movie', async () => {
+    await driver.findElement(By.id('Coco')).click();
+    let message = await driver.findElement(By.id('message')).getText();
+    expect(message).toEqual('Coco deleted!');
 });
